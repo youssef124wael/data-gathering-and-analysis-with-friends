@@ -6,12 +6,14 @@ import requests as r
 
 
 # a class for gathering from each course page on coursera (needs edits i made some mistakes in the completion_time_tag variable)
+# gathering coursera
 class GC:
-    def gather(self, links):
-        coursera_courses_data = {'title': [], 'rating': [], 'completion_time': []}
-
+    def gather(self,links):
+        coursera_courses_data = {'title': [], 'rating': [], 'completion_time': [],'modules_number': []}
+        headers = {"User-Agent": "Mozilla/5.0"}
         for url in links:
-            response = r.get(url)
+            
+            response = r.get(url,headers=headers)
 
             if response.status_code == 200:
                 soup = bs(response.text, 'html.parser')
@@ -42,6 +44,7 @@ class GC:
 
 # this class is for gathering the links of the courses then putting it with the coursera.org link so the link work for soup to work
 # (i don't think any edits here is possible if you noticed anything change it in a branch)
+# gathering coursera links
 class GCL:
     def gathering(self, link):
         links = []
@@ -50,5 +53,5 @@ class GCL:
             soup = bs(response.text, 'html.parser')
             link = soup.select('.cds-ProductCard-content a')
             for url in link:
-                links.append('coursera.org' + url.attrs['href'])
+                links.append('https://www.coursera.org' + url.attrs['href'])
         return links
