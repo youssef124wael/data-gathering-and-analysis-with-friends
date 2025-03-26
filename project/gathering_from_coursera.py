@@ -1,23 +1,20 @@
 # this file is for gathering from coursera only as other files for other websites will be added
 
-
-#importing libraries
-from bs4 import BeautifulSoup
+# importing libraries
+from bs4 import BeautifulSoup as bs
 import requests as r
 
 
-
-
 # a class for gathering from each course page on coursera (needs edits i made some mistakes in the completion_time_tag variable)
-class GatheringCoursera:
-    def gathering(self, links):
+class GC:
+    def gather(self, links):
         coursera_courses_data = {'title': [], 'rating': [], 'completion_time': []}
 
         for url in links:
             response = r.get(url)
-            
+
             if response.status_code == 200:
-                soup = BeautifulSoup(response.text, 'html.parser')
+                soup = bs(response.text, 'html.parser')
 
                 title_tag = soup.find(class_="cds-119 cds-Typography-base css-1xy8ceb cds-121")
                 title = title_tag.text if title_tag else "Title Not Found"
@@ -25,29 +22,32 @@ class GatheringCoursera:
                 rating_tag = soup.find(class_='cds-119 cds-Typography-base css-h1jogs cds-121')
                 rating = rating_tag.text if rating_tag else "Rating Not Found"
 
-                completion_time_tag = soup.find(class_='css-fk6qfz')
+                completion_time_tag = soup.find(class_='css-fw9ih3') # the correct one
                 completion_time = completion_time_tag.text if completion_time_tag else "Time Not Found"
+
+                modules_number_tag = soup.find(class_='cds-119 cds-113 cds-115 css-17cxvu3 cds-142')            # adding the class
+                modules_number = modules_number_tag.text if modules_number_tag else "Number of Modules not found"
 
                 coursera_courses_data['title'].append(title)
                 coursera_courses_data['rating'].append(rating)
                 coursera_courses_data['completion_time'].append(completion_time)
+                coursera_courses_data['modules_number'].append(modules_number)
 
                 print(f"Successful: {title}")
             else:
                 print(f"Failed to load page: {url}")
 
         return coursera_courses_data
-    
 
 
-#this class is for gathering the links of the courses then putting it with the coursera.org link so the link work for soup to work
+# this class is for gathering the links of the courses then putting it with the coursera.org link so the link work for soup to work
 # (i don't think any edits here is possible if you noticed anything change it in a branch)
-class GatheringCourseraLinks:
-    def gathering(self,link):
+class GCL:
+    def gathering(self, link):
         links = []
         response = r.get(link)
         if response.status_code == 200:
-            soup = BeautifulSoup(response.text,'html.parser')
+            soup = bs(response.text, 'html.parser')
             link = soup.select('.cds-ProductCard-content a')
             for url in link:
                 links.append('coursera.org' + url.attrs['href'])
