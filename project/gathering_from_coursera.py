@@ -1,6 +1,14 @@
+# this file is for gathering from coursera only as other files for other websites will be added
+
+
+#importing libraries
 from bs4 import BeautifulSoup
 import requests as r
 
+
+
+
+# a class for gathering from each course page on coursera (needs edits i made some mistakes in the completion_time_tag variable)
 class GatheringCoursera:
     def gathering(self, links):
         coursera_courses_data = {'title': [], 'rating': [], 'completion_time': []}
@@ -31,6 +39,9 @@ class GatheringCoursera:
         return coursera_courses_data
     
 
+
+#this class is for gathering the links of the courses then putting it with the coursera.org link so the link work for soup to work
+# (i don't think any edits here is possible if you noticed anything change it in a branch)
 class GatheringCourseraLinks:
     def gathering(self,link):
         links = []
