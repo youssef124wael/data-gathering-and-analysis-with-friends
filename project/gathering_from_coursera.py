@@ -3,13 +3,13 @@
 # importing libraries
 from bs4 import BeautifulSoup as bs
 import requests as r
-
+import numpy as np
 
 # a class for gathering from each course page on coursera (needs edits i made some mistakes in the completion_time_tag variable)
 # gathering coursera
 class GC:
     def gather(self,links):
-        coursera_courses_data = {'title': [], 'rating': [], 'completion_time': [],'modules_number': []}
+        coursera_courses_data = {'title': [], 'rating': [], 'level of course': [],'modules_number': []}
         headers = {"User-Agent": "Mozilla/5.0"}
         for url in links:
             
@@ -24,17 +24,15 @@ class GC:
                 rating_tag = soup.find(class_='cds-119 cds-Typography-base css-h1jogs cds-121')
                 rating = rating_tag.text if rating_tag else "Rating Not Found"
 
-                completion_time_tag = soup.find(class_='css-fw9ih3') # the correct one
-                completion_time = completion_time_tag.text if completion_time_tag else "Time Not Found"
+                level = soup.select('.css-86zyin .css-fk6qfz')[1].text # the correct one
 
                 modules_number_tag = soup.find(class_='cds-119 cds-113 cds-115 css-17cxvu3 cds-142')            # adding the class
                 modules_number = modules_number_tag.text if modules_number_tag else "Number of Modules not found"
 
                 coursera_courses_data['title'].append(title)
                 coursera_courses_data['rating'].append(rating)
-                coursera_courses_data['completion_time'].append(completion_time)
+                coursera_courses_data['level of course'].append(level)
                 coursera_courses_data['modules_number'].append(modules_number)
-
                 print(f"Successful: {title}")
             else:
                 print(f"Failed to load page: {url}")

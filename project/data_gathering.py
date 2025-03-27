@@ -9,14 +9,17 @@ for i in range(83):
 gathering_courses = GC()
 gathering_links_bot = GCL()
 
-df = {'title': [], 'rating': [], 'completion_time': [],'modules_number': []}
+df = {'title': [], 'rating': [], 'level of course': [],'modules_number': []}
+page = 1
 for link in links:
     page_courses = gathering_links_bot.gathering(link)
     course_data = gathering_courses.gather(page_courses)
     df['title'].extend(course_data['title'])
     df['rating'].extend(course_data['rating'])
-    df['completion_time'].extend(course_data['completion_time'])
+    df['level of course'].extend(course_data['level of course'])
     df['modules_number'].extend(course_data['modules_number'])
+    print(f'page {str(page)} got extracted from')
+    page += 1
 
 df = pd.DataFrame(df)
-df.to_csv('courses.csv')
+df.to_csv('courses_edited.csv')
